@@ -19,12 +19,23 @@
 #define APP_NAME     "PACKDROP"
 #define APP_VERSION  "v2.0a"
 
+#ifdef BOARD_ROCK64
+// ROCK64
+#define PIN_LED (4)
+#define PIN_SW  (22)
+#define PIN_D_A (23)
+#define PIN_D_B (24)
+#define PIN_L_A (25)
+#define PIN_L_B (7)
+#else
+// Raspberry Pi
 #define PIN_LED (27)
 #define PIN_SW  (22)
 #define PIN_D_A (5)
 #define PIN_D_B (6)
 #define PIN_L_A (26)
 #define PIN_L_B (16)
+#endif
 
 #define SW_ON   (0)
 
