@@ -149,7 +149,6 @@ int wiringPiISR(int pin, int mode, void (*function)(void))
 {
     gpio[pin].callback = function;
     gpio[pin].mode = mode;
-    printf("wiringPiISR %d %d 0x%08x%08x\n", pin, mode, ((unsigned long long) function)>>32, function);
 
     return 0;
 }
