@@ -248,7 +248,7 @@ main (int argc, char *argv[]) {
         tc_init(devices[n]);
     }
     while (1){
-	if (s.num == SW_ON) {
+        if (s.num == SW_ON) {
             burst_mode();
             delay = loss = -1;
         }
@@ -259,7 +259,7 @@ main (int argc, char *argv[]) {
                 tc_set(devices[n], delay, loss);
             }
             lcd_write(delay, loss);
-	    digitalWrite(PIN_LED, (delay || loss) ? 1 : 0);
+        digitalWrite(PIN_LED, (delay || loss) ? 1 : 0);
         }
         usleep(10000);
     }
