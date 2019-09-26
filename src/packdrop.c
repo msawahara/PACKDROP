@@ -4,8 +4,17 @@
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
+
+#ifdef BOARD_ROCK64
+// ROCK64
+#include "board_rock64.h"
+#define LCD_I2C_BUS (0)
+#else
+// Raspberry Pi
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
+#define LCD_I2C_BUS (1)
+#endif
 
 #define APP_NAME     "PACKDROP"
 #define APP_VERSION  "v2.0a"
@@ -60,14 +69,16 @@ static void
 lcd_write_core (const char *upper, const char *lower) {
     char cmd[128];
 
-    system("i2cset -y 1 0x3e 0 0x80 b");
-    snprintf(cmd, sizeof(cmd), "i2cset -y 1 0x3e 0x40 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x i",
-        upper[0], upper[1], upper[2], upper[3], upper[4], upper[5], upper[6], upper[7]);
+    snprintf(cmd, sizeof(cmd), "i2cset -y %d 0x3e 0 0x80 b", LCD_I2C_BUS);
+    system(cmd);
+    snprintf(cmd, sizeof(cmd), "i2cset -y %d 0x3e 0x40 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x i",
+        LCD_I2C_BUS, upper[0], upper[1], upper[2], upper[3], upper[4], upper[5], upper[6], upper[7]);
     system(cmd);
 
-    system("i2cset -y 1 0x3e 0 0xc0 b");
-    snprintf(cmd, sizeof(cmd), "i2cset -y 1 0x3e 0x40 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x i",
-        lower[0], lower[1], lower[2], lower[3], lower[4], lower[5], lower[6], lower[7]);
+    snprintf(cmd, sizeof(cmd), "i2cset -y %d 0x3e 0 0xc0 b", LCD_I2C_BUS);
+    system(cmd);
+    snprintf(cmd, sizeof(cmd), "i2cset -y %d 0x3e 0x40 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x i",
+        LCD_I2C_BUS, lower[0], lower[1], lower[2], lower[3], lower[4], lower[5], lower[6], lower[7]);
     system(cmd);
 }
 
@@ -82,11 +93,15 @@ lcd_write (int delay, int loss) {
 
 static void
 lcd_init (void) {
+    char cmd[128];
     char name[9], ver[9];
 
-    system("i2cset -y 1 0x3e 0 0x38 0x39 0x14 0x78 0x5f 0x6a i");
-    system("i2cset -y 1 0x3e 0 0x0c 0x01 i");
-    system("i2cset -y 1 0x3e 0 0x06 i");
+    snprintf(cmd, sizeof(cmd), "i2cset -y %d 0x3e 0 0x38 0x39 0x14 0x78 0x5f 0x6a i", LCD_I2C_BUS);
+    system(cmd);
+    snprintf(cmd, sizeof(cmd), "i2cset -y %d 0x3e 0 0x0c 0x01 i", LCD_I2C_BUS);
+    system(cmd);
+    snprintf(cmd, sizeof(cmd), "i2cset -y %d 0x3e 0 0x06 i", LCD_I2C_BUS);
+    system(cmd);
     snprintf(name, sizeof(name), "%8s", APP_NAME);
     snprintf(ver, sizeof(ver), "%8s", APP_VERSION);
     lcd_write_core(name, ver);

@@ -1,0 +1,9 @@
+.PHONY: clean
+
+all: packdrop
+
+packdrop: packdrop.c board_rock64.c
+	$(CC) -W -Wall -g -o $@ $^ -DBOARD_ROCK64 -lpthread
+
+clean:
+	rm packdrop
