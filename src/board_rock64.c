@@ -31,11 +31,11 @@ static struct gpioRock64 {
     int mode;
 } gpio[GPIO_PINS];
 
-int rock64GpioNum(int wpiPinNo)
+int rock64GpioNum(int rpiGpioNo)
 {
-    if ((wpiPinNo < 0)||(wpiPinNo >= GPIO_PINS)) {return -1;}
+    if ((rpiGpioNo < 0)||(rpiGpioNo >= GPIO_PINS)) {return -1;}
 
-    return gpioToRock64[wpiPinNo];
+    return gpioToRock64[rpiGpioNo];
 }
 
 void rock64GpioPoller(void)
